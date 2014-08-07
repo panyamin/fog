@@ -71,15 +71,16 @@ module Fog
         :expects  => [200, 204],
         :headers  => {
           'X-Auth-Key'  => @openstack_api_key,
-          'X-Auth-User' => @openstack_username
+          'X-Auth-User' => @openstack_username,
+          'X-Auth-Token'  => @openstack_api_key
         },
         :method   => 'GET',
         :path     =>  (uri.path and not uri.path.empty?) ? uri.path : 'v1.0'
       })
 
       return {
-        :token => response.headers['X-Auth-Token'],
-        :server_management_url => response.headers['X-Server-Management-Url'] || response.headers['X-Storage-Url'],
+        :token => @openstack_api_key,
+        :server_management_url => uri.to_s,
         :identity_public_endpoint => response.headers['X-Keystone']
       }
     end
